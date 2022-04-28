@@ -10,7 +10,10 @@ if __name__=='__main__':
     data=pd.read_csv('../data/data.csv')
     input_features=51*6
     X=data.iloc[:,:input_features]
-    y_indices=[i for i in range(input_features+3,input_features+3+4)]+[i for i in range(input_features+12,input_features+16)]
+    y_indices = list(range(input_features + 3, input_features + 3 + 4)) + list(
+        range(input_features + 12, input_features + 16)
+    )
+
     y=data.iloc[:,y_indices]
     print(X.describe())
     for col in X.columns:
@@ -27,7 +30,7 @@ if __name__=='__main__':
 
     y_test_pred=lgb_multi_model.predict(X_test)
     y_train_pred=lgb_multi_model.predict(X_train)
-    print('sample_y:',y_test[0:5])
-    print('sample_pred:',y_test_pred[0:5])
+    print('sample_y:', y_test[:5])
+    print('sample_pred:', y_test_pred[:5])
     print('train rmse:',np.sqrt(mean_squared_error(yscaler.inverse_transform(y_train),yscaler.inverse_transform(y_train_pred))))
     print('test rmse:',np.sqrt(mean_squared_error(yscaler.inverse_transform(y_test),yscaler.inverse_transform(y_test_pred))))

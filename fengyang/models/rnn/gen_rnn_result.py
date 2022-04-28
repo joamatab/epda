@@ -21,7 +21,10 @@ if __name__=='__main__':
         if col.startswith('te1_') or col.startswith('te2_') or col.startswith('tm1_') or col.startswith('tm2_'):
             X.loc[:,col] = np.log(copy.deepcopy(X.loc[:,col]))
 
-    y_indices = [i for i in range(input_features + 3, input_features + 3 + 4)] + [i for i in range(input_features+12, input_features +16)]
+    y_indices = list(range(input_features + 3, input_features + 3 + 4)) + list(
+        range(input_features + 12, input_features + 16)
+    )
+
     y = data.iloc[:, y_indices]
 
     xscaler=MinMaxScaler()

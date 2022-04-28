@@ -40,7 +40,10 @@ logging.info(opt)
 
 device=torch.device(opt.device)
 if opt.load_checkpoint is not None:
-    logging.info("loading checkpoint from {}".format(os.path.join(opt.expt_dir, Checkpoint.CHECKPOINT_DIR_NAME, opt.load_checkpoint)))
+    logging.info(
+        f"loading checkpoint from {os.path.join(opt.expt_dir, Checkpoint.CHECKPOINT_DIR_NAME, opt.load_checkpoint)}"
+    )
+
     checkpoint_path = os.path.join(opt.expt_dir, Checkpoint.CHECKPOINT_DIR_NAME, opt.load_checkpoint)
     checkpoint = Checkpoint.load(checkpoint_path)
     seq2seq = checkpoint.model.to(device)
@@ -53,7 +56,10 @@ else:
             X[col] = np.log(X[col])
     X_describe=X.describe()
     X_describe.to_csv('X_describe.csv',index=True)
-    y_indices = [i for i in range(input_features + 3, input_features + 3 + 4)] + [i for i in range(input_features+12,input_features+16)]
+    y_indices = list(range(input_features + 3, input_features + 3 + 4)) + list(
+        range(input_features + 12, input_features + 16)
+    )
+
     y = data.iloc[:, y_indices]
     scaler=MinMaxScaler()
     X=scaler.fit_transform(X)

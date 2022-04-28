@@ -11,7 +11,7 @@ def line_angle(p1,p2):
 def remove_straight_angles(pts):
     tmppts =[] # remove the same point
     small_num_flag = False
-    for iter in range(0, len(pts)-1):
+    for iter in range(len(pts)-1):
         small_num_flag = False
         v1 = pts[iter+1] - pts[iter]
         if np.sum(v1**2) < 1e-5:
@@ -22,7 +22,7 @@ def remove_straight_angles(pts):
         tmppts.append(pts[-1])
 
     newpts = [tmppts[0]]
-    if 3 <= len(tmppts):
+    if len(tmppts) >= 3:
         for iter in range(1,len(tmppts)-1):
             v1 = tmppts[iter] - tmppts[iter -1]
             v2 = tmppts[iter+1] - tmppts[iter]
@@ -70,11 +70,25 @@ class Waveguide:
         return length
 
     def poly(self):
-        pt1s = []
-        pt2s = []
         tmp_w = math.fabs(self.width/2.0/math.sin(self.start_face_angle-self.start_angle))
-        pt1s.append(np.array([math.cos(self.start_face_angle) * tmp_w + self.pts[0][0], math.sin(self.start_face_angle) * tmp_w + self.pts[0][1]]))
-        pt2s.append(np.array([-math.cos(self.start_face_angle) * tmp_w + self.pts[0][0], -math.sin(self.start_face_angle) * tmp_w + self.pts[0][1]]))
+        pt1s = [
+            np.array(
+                [
+                    math.cos(self.start_face_angle) * tmp_w + self.pts[0][0],
+                    math.sin(self.start_face_angle) * tmp_w + self.pts[0][1],
+                ]
+            )
+        ]
+
+        pt2s = [
+            np.array(
+                [
+                    -math.cos(self.start_face_angle) * tmp_w + self.pts[0][0],
+                    -math.sin(self.start_face_angle) * tmp_w + self.pts[0][1],
+                ]
+            )
+        ]
+
         if len(self.pts) >= 2:
             for iter in range(1, len(self.pts)-1):
                 pt = self.pts[iter]
@@ -85,7 +99,7 @@ class Waveguide:
                 line_dir = line_angle(self.pts[iter - 1],pt)
                 theta = math.pi/2.0 + beta/2.0 + line_dir
                 pt1s.append(np.array([math.cos(theta) * tmp_w + pt[0],math.sin(theta) * tmp_w + pt[1]]))
-                pt2s.insert(0,np.array([-math.cos(theta)*tmp_w+pt[0],-math.sin(theta)*tmp_w+pt[1]]))      
+                pt2s.insert(0,np.array([-math.cos(theta)*tmp_w+pt[0],-math.sin(theta)*tmp_w+pt[1]]))
         tmp_w = math.fabs(self.width/2.0/math.sin(self.end_face_angle - self.end_angle))
         pt1s.append(np.array([math.cos(self.end_face_angle)*tmp_w+self.pts[-1][0],math.sin(self.end_face_angle)*tmp_w+self.pts[-1][1]]))
         pt2s.insert(0,np.array([-math.cos(self.end_face_angle)*tmp_w+self.pts[-1][0],-math.sin(self.end_face_angle)*tmp_w+self.pts[-1][1]]))

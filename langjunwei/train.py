@@ -37,10 +37,13 @@ def hidden_layer(layer_input, output_depth, scope='hidden_layer', reuse=None):
 def DNN(input, output_depths, scope='DNN', reuse=None):
     net = input
     for i, output_depth in enumerate(output_depths):
-        net = hidden_layer(layer_input=net,
-                           output_depth=output_depth,
-                           scope='layer{}'.format(i),
-                           reuse=reuse)
+        net = hidden_layer(
+            layer_input=net,
+            output_depth=output_depth,
+            scope=f'layer{i}',
+            reuse=reuse,
+        )
+
         net = tf.nn.relu(net)
 
     # the last layer should be 10 dimensions to classify, don't drop out
@@ -159,7 +162,7 @@ print('Train loss: {:.6f}'.format(np.array(train_loss).mean()))
 # calculate the loss of all the test_set
 test_loss = []
 
-for e in range(test_input_numpy.shape[0] // 100):
+for _ in range(test_input_numpy.shape[0] // 100):
     image = test_input_numpy
     label = test_label_numpy
     loss_test= sess.run(loss, feed_dict={input_ph: image, label_ph: label, keep_prob: 1})

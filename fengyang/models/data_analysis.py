@@ -5,10 +5,9 @@ import numpy as np
 
 labels_cols=[]
 for i in [1,2]:
-    labels_cols.append('wg_'+str(i)+'_w')
+    labels_cols.append(f'wg_{str(i)}_w')
     for j in [1,2,3,4]:
-        labels_cols.append('wg_'+str(i)+'_p_'+str(j)+'_x')
-        labels_cols.append('wg_' + str(i) + '_p_' + str(j) + '_y')
+        labels_cols.extend((f'wg_{str(i)}_p_{str(j)}_x', f'wg_{str(i)}_p_{str(j)}_y'))
 print(labels_cols)
 
 if __name__=='__main__':
